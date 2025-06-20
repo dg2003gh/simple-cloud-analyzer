@@ -1,5 +1,7 @@
 import argparse
 
+from CONSTS import CLOUDS
+
 """
 CRITICAL_PORTS = {
     22: "SSH",
@@ -22,8 +24,8 @@ class CLI(argparse.ArgumentParser):
 
         self.add_argument(
             "--provider",
-            choices=["aws"],
-            default="aws",
+            choices=CLOUDS,
+            default=CLOUDS.AWS,
             help="Provedor de nuvem para analisar (ex: aws)",
         )
 
