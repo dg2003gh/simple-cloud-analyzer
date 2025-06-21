@@ -1,4 +1,4 @@
-🔐 Cloud Security Analyzer (SCA)
+🔐 Simple Cloud Analyzer (SCA)
 
 A Python utility for security auditing multi-cloud environments, focused on identifying insecure configurations, public exposures, and misconfigurations in major cloud services.
 
