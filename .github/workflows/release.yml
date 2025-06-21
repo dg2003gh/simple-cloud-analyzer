@@ -58,9 +58,15 @@ jobs:
           tar -czf ${APP_NAME}-linux.tar.gz -C dist/linux $APP_NAME
           tar -czf ${APP_NAME}-windows.tar.gz -C dist/windows $APP_NAME.exe
 
+      - name: "Get Previous tag"
+        id: previous_tag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{steps.previous_tag.outputs.tag}}
           files: |
             $APP_NAME-linux.zip
             $APP_NAME-windows.zip
