@@ -1,0 +1,8 @@
+Service,Type,Resource,Description,From
+GCE,OpenFirewall,default-allow-icmp,Firewall default-allow-icmp allows icmp from 0.0.0.0/0,livro-livre-453116
+GCE,OpenFirewall,default-allow-rdp,Firewall default-allow-rdp allows tcp from 0.0.0.0/0,livro-livre-453116
+GCE,OpenFirewall,default-allow-ssh,Firewall default-allow-ssh allows tcp from 0.0.0.0/0,livro-livre-453116
+GCE,OpenFirewall,world,Firewall world allows tcp from 0.0.0.0/0,livro-livre-453116
+GCE,OpenFirewall,world1,Firewall world1 allows tcp from ::/0,livro-livre-453116
+IAM,SensitivePermission,projects/livro-livre-453116/roles/CustomRole,Project livro-livre-453116 has role projects/livro-livre-453116/roles/CustomRole with sensitive permissions,livro-livre-453116
+Storage,PublicBucket,my_bucket-0fdhjfdsjklhflkdsj,Bucket my_bucket-0fdhjfdsjklhflkdsj is public via role roles/storage.bucketViewer,livro-livre-453116

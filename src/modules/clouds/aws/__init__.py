@@ -1,83 +1,42 @@
 #!/usr/bin/env python
 
 import boto3
-import logging
-import csv
-from datetime import datetime, timezone
+
 from botocore.exceptions import BotoCoreError, ClientError
-from colorama import Fore, Style, init
-from tabulate import tabulate
+from colorama import Fore, init
+from modules.clouds.provider import Provider
 
-from modules.utils import Utils
-
-
-utils = Utils()
 
 # Initialize colorama
 init(autoreset=True)
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler("aws_analyzer.log"), logging.StreamHandler()],
-)
 
 """
 Analyze an AWS account looking for Security failures.
 """
 
 
-class AWSAnalyzer:
-    def __init__(
-        self,
-        ports: list[int],
-        output_file: str,
-        regions: list[str],
-        enable_logging: bool,
-    ) -> None:
-        self.IPV4_INTERNET_IP = "0.0.0.0/0"
-        self.IPV6_INTERNET_IP = "::/0"
-        self.now = datetime.now(timezone.utc)
-        self.findings = []
-        self.output_file = output_file
-        self.ports = ports
-        self.enable_logging = enable_logging
+class AWSAnalyzer(Provider):
+    def __init__(self, regions: list[str], *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
-        if not self.enable_logging:
-            logging.disable(logging.CRITICAL)
+        self.__check_regions(regions)
+        self.run_all_checks()
 
-        if len(regions) > 0:
+    def __check_regions(self, regions: list[str]):
+        if [r for r in regions if r.strip()]:
             self.regions = regions
         else:
             ec2 = boto3.client("ec2")
             regions_resp = ec2.describe_regions(AllRegions=False)
             self.regions = [r["RegionName"] for r in regions_resp["Regions"]]
 
-        self.run_all_checks()
-
-    def _section(self, title, region):
-        msg = f"{'=' * 10} {title.upper()} [{region}] {'=' * 10}"
-        print(f"\n{Fore.GREEN}{msg}{Style.RESET_ALL}")
-        logging.info(msg)
-
-    def _add_finding(self, service, finding_type, resource, description, region):
-        self.findings.append(
-            {
-                "Service": service,
-                "Type": finding_type,
-                "Resource": resource,
-                "Description": description,
-                "Region": region,
-            }
-        )
-
     def check_ec2(self, region):
         """
         Check every security group searching for open ports to world.
         Also check open critical ports.
         """
-        self._section("EC2 Security Group Analysis", region)
+        self.utils.section("EC2 Security Group Analysis", region)
         try:
             ec2 = boto3.client("ec2", region_name=region)
             for sg in ec2.describe_security_groups()["SecurityGroups"]:
@@ -93,8 +52,8 @@ class AWSAnalyzer:
                                 if p in opened:
                                     msg = f"SG {sg['GroupId']}:{sg['GroupName']} → port {p}/{proto} open to 0.0.0.0/0"
                                     print(Fore.RED + "[SG][IPv4] " + msg)
-                                    logging.warning(msg)
-                                    self._add_finding(
+                                    self.logger.warning(msg)
+                                    self.report_generator.add_finding(
                                         "SG",
                                         "IPv4",
                                         sg["GroupId"],
@@ -109,8 +68,8 @@ class AWSAnalyzer:
                                 if p in opened:
                                     msg = f"SG {sg['GroupId']}:{sg['GroupName']} → port {p}/{proto} open to ::/0"
                                     print(Fore.MAGENTA + "[SG][IPv6] " + msg)
-                                    logging.warning(msg)
-                                    self._add_finding(
+                                    self.logger.warning(msg)
+                                    self.report_generator.add_finding(
                                         "SG",
                                         "IPv6",
                                         sg["GroupId"],
@@ -118,13 +77,13 @@ class AWSAnalyzer:
                                         region,
                                     )
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[EC2][{region}] Error: {e}")
+            self.logger.error(f"[EC2][{region}] Error: {e}")
 
     def check_rds(self, region):
         """
         Check for public subnet deployed RDS instances.
         """
-        self._section("RDS Analysis", region)
+        self.utils.section("RDS Analysis", region)
         try:
             rds = boto3.client("rds", region_name=region)
             ec2 = boto3.client("ec2", region_name=region)
@@ -161,8 +120,10 @@ class AWSAnalyzer:
                 if any(subnet in public_subnets for subnet in subnet_ids):
                     msg = f"RDS {instance_id} is deployed in a public subnet"
                     print(Fore.RED + "[RDS][PUBLIC SUBNET] " + msg)
-                    logging.warning(msg)
-                    self._add_finding("RDS", "PublicSubnet", instance_id, msg, region)
+                    self.logger.warning(msg)
+                    self.report_generator.add_finding(
+                        "RDS", "PublicSubnet", instance_id, msg, region
+                    )
 
                 # Check SG open to world
                 for sg_id in sg_ids:
@@ -171,7 +132,7 @@ class AWSAnalyzer:
                         continue
                     for perm in sg.get("IpPermissions", []):
                         for ip_range in perm.get("IpRanges", []):
-                            if ip_range.get("CidrIp") == "0.0.0.0/0":
+                            if ip_range.get("CidrIp") == self.IPV4_INTERNET_IP:
                                 proto = perm.get("IpProtocol")
                                 from_port = perm.get("FromPort")
                                 to_port = perm.get("ToPort")
@@ -182,12 +143,12 @@ class AWSAnalyzer:
                                 )
                                 msg = f"RDS {instance_id} SG {sg_id} allows {port_str}/{proto} from 0.0.0.0/0"
                                 print(Fore.RED + "[RDS][OPEN SG] " + msg)
-                                logging.warning(msg)
-                                self._add_finding(
+                                self.logger.warning(msg)
+                                self.report_generator.add_finding(
                                     "RDS", "OpenSGIPv4", instance_id, msg, region
                                 )
                         for ip_range in perm.get("Ipv6Ranges", []):
-                            if ip_range.get("CidrIpv6") == "::/0":
+                            if ip_range.get("CidrIpv6") == self.IPV6_INTERNET_IP:
                                 proto = perm.get("IpProtocol")
                                 from_port = perm.get("FromPort")
                                 to_port = perm.get("ToPort")
@@ -198,8 +159,8 @@ class AWSAnalyzer:
                                 )
                                 msg = f"RDS {instance_id} SG {sg_id} allows {port_str}/{proto} from ::/0"
                                 print(Fore.RED + "[RDS][OPEN SG] " + msg)
-                                logging.warning(msg)
-                                self._add_finding(
+                                self.logger.warning(msg)
+                                self.report_generator.add_finding(
                                     "RDS", "OpenSGIPv6", instance_id, msg, region
                                 )
 
@@ -207,14 +168,16 @@ class AWSAnalyzer:
                 if inst.get("PubliclyAccessible"):
                     msg = f"{instance_id} is marked as publicly accessible"
                     print(Fore.RED + "[RDS][PUBLICLY ACCESSIBLE] " + msg)
-                    logging.warning(msg)
-                    self._add_finding("RDS", "Public", instance_id, msg, region)
+                    self.logger.warning(msg)
+                    self.report_generator.add_finding(
+                        "RDS", "Public", instance_id, msg, region
+                    )
 
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[RDS][{region}] Error: {e}")
+            self.logger.error(f"[RDS][{region}] Error: {e}")
 
     def check_vpc(self, region):
-        self._section("VPC Route Table Analysis", region)
+        self.utils.section("VPC Route Table Analysis", region)
         try:
             ec2 = boto3.client("ec2", region_name=region)
             for rt in ec2.describe_route_tables()["RouteTables"]:
@@ -226,15 +189,15 @@ class AWSAnalyzer:
                     if assoc.get("SubnetId") and uses_igw:
                         msg = f"Subnet {assoc['SubnetId']} in RT {rt['RouteTableId']} is public"
                         print(Fore.YELLOW + "[VPC] " + msg)
-                        logging.warning(msg)
-                        self._add_finding(
+                        self.logger.warning(msg)
+                        self.report_generator.add_finding(
                             "VPC", "Public Subnet", assoc["SubnetId"], msg, region
                         )
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[VPC][{region}] Error: {e}")
+            self.logger.error(f"[VPC][{region}] Error: {e}")
 
     def check_ecs(self, region):
-        self._section("ECS Task Definition Analysis", region)
+        self.utils.section("ECS Task Definition Analysis", region)
         try:
             ecs = boto3.client("ecs", region_name=region)
             clusters = ecs.list_clusters()["clusterArns"]
@@ -250,13 +213,15 @@ class AWSAnalyzer:
                     ):
                         msg = f"{td_arn} in {cl} uses awsvpc → may have public IP"
                         print(Fore.CYAN + "[ECS] " + msg)
-                        logging.warning(msg)
-                        self._add_finding("ECS", "awsvpc-public", td_arn, msg, region)
+                        self.logger.warning(msg)
+                        self.report_generator.add_finding(
+                            "ECS", "awsvpc-public", td_arn, msg, region
+                        )
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[ECS][{region}] Error: {e}")
+            self.logger.error(f"[ECS][{region}] Error: {e}")
 
     def check_eks(self, region):
-        self._section("EKS Cluster Analysis", region)
+        self.utils.section("EKS Cluster Analysis", region)
         try:
             eks = boto3.client("eks", region_name=region)
             for c in eks.list_clusters()["clusters"]:
@@ -264,28 +229,31 @@ class AWSAnalyzer:
                 if info["resourcesVpcConfig"].get("endpointPublicAccess"):
                     msg = f"Cluster {c} has public API endpoint"
                     print(Fore.RED + "[EKS] " + msg)
-                    logging.warning(msg)
-                    self._add_finding("EKS", "Public API", c, msg, region)
+                    self.logger.warning(msg)
+                    self.report_generator.add_finding(
+                        "EKS", "Public API", c, msg, region
+                    )
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[EKS][{region}] Error: {e}")
+            self.logger.error(f"[EKS][{region}] Error: {e}")
 
     def check_ebs(self, region):
-        self._section("EBS Encryption Analysis", region)
+        self.utils.section("EBS Encryption Analysis", region)
         try:
             ec2 = boto3.client("ec2", region_name=region)
             for v in ec2.describe_volumes()["Volumes"]:
                 if not v.get("Encrypted"):
                     msg = f"Volume {v['VolumeId']} is unencrypted"
                     print(Fore.YELLOW + "[EBS] " + msg)
-                    logging.warning(msg)
-                    self._add_finding("EBS", "Unencrypted", v["VolumeId"], msg, region)
+                    self.logger.warning(msg)
+                    self.report_generator.add_finding(
+                        "EBS", "Unencrypted", v["VolumeId"], msg, region
+                    )
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[EBS][{region}] Error: {e}")
+            self.logger.error(f"[EBS][{region}] Error: {e}")
 
     def check_IAM(self):
-
         region = "global"
-        self._section("IAM Analysis", region)
+        self.utils.section("IAM Analysis", "global")
         try:
             iam = boto3.client("iam")
             users = iam.list_users()["Users"]
@@ -301,8 +269,10 @@ class AWSAnalyzer:
                     if policy["PolicyName"] == "AdministratorAccess":
                         msg = f"{username} has AdministratorAccess"
                         print(Fore.RED + "[IAM][ADMIN] " + msg)
-                        logging.warning(msg)
-                        self._add_finding("IAM", "AdminPolicy", username, msg, region)
+                        self.logger.warning(msg)
+                        self.report_generator.add_finding(
+                            "IAM", "AdminPolicy", username, msg, region
+                        )
 
                 # Access key age check
                 keys = iam.list_access_keys(UserName=username)["AccessKeyMetadata"]
@@ -311,8 +281,10 @@ class AWSAnalyzer:
                     if age_days > 90:
                         msg = f"{username} key {key['AccessKeyId']} is {age_days} days old"
                         print(Fore.YELLOW + "[IAM][KEY] " + msg)
-                        logging.warning(msg)
-                        self._add_finding("IAM", "OldAccessKey", username, msg, region)
+                        self.logger.warning(msg)
+                        self.report_generator.add_finding(
+                            "IAM", "OldAccessKey", username, msg, region
+                        )
 
                 # Password last used check
                 pw_data = iam.get_user(UserName=username)["User"]
@@ -322,39 +294,26 @@ class AWSAnalyzer:
                     if age_days > 90:
                         msg = f"{username} password not used in {age_days} days"
                         print(Fore.MAGENTA + "[IAM][PW] " + msg)
-                        logging.warning(msg)
-                        self._add_finding("IAM", "StalePassword", username, msg, region)
+                        self.logger.warning(msg)
+                        self.report_generator.add_finding(
+                            "IAM", "StalePassword", username, msg, region
+                        )
                 else:
                     msg = f"{username} has no password usage record"
                     print(Fore.LIGHTBLACK_EX + "[IAM][PW] " + msg)
-                    logging.info(msg)
-                    self._add_finding("IAM", "NoPasswordRecord", username, msg, region)
+                    self.logger.info(msg)
+                    self.report_generator.add_finding(
+                        "IAM", "NoPasswordRecord", username, msg, region
+                    )
         except (BotoCoreError, ClientError) as e:
-            logging.error(f"[IAM] Error: {e}")
-
-    def generate_report(self, output_file):
-        self._section("Generating CSV Report", "ALL REGIONS")
-        headers = ["Service", "Type", "Resource", "Description", "Region"]
-
-        with open(output_file, mode="w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=headers)
-            writer.writeheader()
-            for row in self.findings:
-                writer.writerow(row)
-
-        print(
-            tabulate(
-                utils.rm_column(self.findings, "Description"),
-                headers="keys",
-                tablefmt="github",
-                showindex=True,
-            )
-        )
-
-        print(Fore.GREEN + f"Report generated: {output_file}")
-        logging.info(f"Report generated: {output_file}")
+            self.logger.error(f"[IAM] Error: {e}")
 
     def run_all_checks(self):
+
+        #####################
+        # Regional services #
+        #####################
+
         for region in self.regions:
             self.check_ec2(region)
             self.check_rds(region)
@@ -363,5 +322,8 @@ class AWSAnalyzer:
             self.check_eks(region)
             self.check_ebs(region)
 
+        ###################
+        # Global services #
+        ###################
+
         self.check_IAM()
-        self.generate_report(self.output_file)

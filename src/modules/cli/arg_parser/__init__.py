@@ -15,17 +15,17 @@ CRITICAL_PORTS = {
 """
 
 
-class CLI(argparse.ArgumentParser):
-
+class ArgParser(argparse.ArgumentParser):
     def __init__(self):
         super().__init__(
             description="Simple Cloud Analyzer - Multi-cloud Security Scanner"
         )
 
         self.add_argument(
-            "--provider",
-            choices=CLOUDS,
-            default=CLOUDS.AWS,
+            "--providers",
+            nargs="+",
+            choices=CLOUDS.values(),
+            default=CLOUDS[7316],
             help="Provedor de nuvem para analisar (ex: aws)",
         )
 
@@ -49,6 +49,13 @@ class CLI(argparse.ArgumentParser):
             type=str,
             default="",
             help="Lista de regiões AWS que devem ser escaneadas (ex: --aws-regions 'us-east-1,sa-east-1')",
+        )
+
+        self.add_argument(
+            "--gcp-projects",
+            type=str,
+            default="",
+            help="Lista de ids dos projetos GCP que devem ser escaneados (ex: --gcp-projects 'meu-projeto-prd,meu-projeto-stg')",
         )
 
         self.add_argument(

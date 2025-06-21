@@ -1,0 +1,188 @@
+2025-06-21 13:54:59,005 [INFO] ========== COMPUTE ENGINE FIREWALL ANALYSIS [livro-livre-453116] ==========
+2025-06-21 13:55:02,121 [WARNING] Firewall default-allow-icmp allows icmp from 0.0.0.0/0
+2025-06-21 13:55:02,121 [WARNING] Firewall default-allow-rdp allows tcp from 0.0.0.0/0
+2025-06-21 13:55:02,121 [WARNING] Firewall default-allow-ssh allows tcp from 0.0.0.0/0
+2025-06-21 13:55:02,121 [WARNING] Firewall world allows tcp from 0.0.0.0/0
+2025-06-21 13:55:02,122 [INFO] ========== CLOUD SQL PUBLIC EXPOSURE [livro-livre-453116] ==========
+2025-06-21 13:55:04,630 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 13:55:05,026 [WARNING] Encountered 403 Forbidden with reason "accessNotConfigured"
+2025-06-21 13:55:05,027 [ERROR] [CloudSQL][livro-livre-453116] Error: <HttpError 403 when requesting https://sqladmin.googleapis.com/sql/v1beta4/projects/livro-livre-453116/instances?alt=json returned "Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2025-06-21 13:55:05,027 [INFO] ========== IAM ROLE ANALYSIS [livro-livre-453116] ==========
+2025-06-21 13:55:07,513 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 13:55:08,625 [INFO] ========== GKE CLUSTER EXPOSURE [livro-livre-453116] ==========
+2025-06-21 13:55:11,546 [ERROR] [GKE][livro-livre-453116] Error: 403 Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "container.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Kubernetes Engine API"
+}
+metadata {
+  key: "containerInfo"
+  value: "livro-livre-453116"
+}
+metadata {
+  key: "consumer"
+  value: "projects/livro-livre-453116"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+, locale: "en-US"
+message: "Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+]
+2025-06-21 13:55:11,547 [INFO] ========== CLOUD STORAGE BUCKET ACCESS [livro-livre-453116] ==========
+2025-06-21 13:55:14,972 [INFO] ========== PERSISTENT DISK ENCRYPTION (CMEK) [livro-livre-453116] ==========
+2025-06-21 13:57:48,221 [INFO] ========== GENERATING CSV REPORT [ALL REGIONS] ==========
+2025-06-21 13:57:48,221 [INFO] Report generated: report.csv
+2025-06-21 14:28:27,491 [INFO] ========== COMPUTE ENGINE FIREWALL ANALYSIS [livro-livre-453116] ==========
+2025-06-21 14:28:30,607 [WARNING] Firewall default-allow-icmp allows icmp from 0.0.0.0/0
+2025-06-21 14:28:30,608 [WARNING] Firewall default-allow-rdp allows tcp from 0.0.0.0/0
+2025-06-21 14:28:30,608 [WARNING] Firewall default-allow-ssh allows tcp from 0.0.0.0/0
+2025-06-21 14:28:30,608 [WARNING] Firewall world allows tcp from 0.0.0.0/0
+2025-06-21 14:28:30,609 [INFO] ========== CLOUD SQL PUBLIC EXPOSURE [livro-livre-453116] ==========
+2025-06-21 14:28:33,214 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 14:28:33,431 [WARNING] Encountered 403 Forbidden with reason "accessNotConfigured"
+2025-06-21 14:28:33,431 [ERROR] [CloudSQL][livro-livre-453116] Error: <HttpError 403 when requesting https://sqladmin.googleapis.com/sql/v1beta4/projects/livro-livre-453116/instances?alt=json returned "Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2025-06-21 14:28:33,431 [INFO] ========== IAM ROLE ANALYSIS [livro-livre-453116] ==========
+2025-06-21 14:28:36,078 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 14:28:36,421 [WARNING] Project livro-livre-453116 has role projects/livro-livre-453116/roles/CustomRole with sensitive permissions
+2025-06-21 14:28:36,421 [INFO] ========== GKE CLUSTER EXPOSURE [livro-livre-453116] ==========
+2025-06-21 14:28:39,503 [ERROR] [GKE][livro-livre-453116] Error: 403 Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "container.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Kubernetes Engine API"
+}
+metadata {
+  key: "containerInfo"
+  value: "livro-livre-453116"
+}
+metadata {
+  key: "consumer"
+  value: "projects/livro-livre-453116"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+, locale: "en-US"
+message: "Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+]
+2025-06-21 14:28:39,503 [INFO] ========== CLOUD STORAGE BUCKET ACCESS [livro-livre-453116] ==========
+2025-06-21 14:28:43,172 [WARNING] Bucket my_bucket-0fdhjfdsjklhflkdsj is public via role roles/storage.bucketViewer
+2025-06-21 14:28:43,173 [INFO] ========== PERSISTENT DISK ENCRYPTION (CMEK) [livro-livre-453116] ==========
+2025-06-21 14:31:10,461 [INFO] ========== GENERATING CSV REPORT... [] ==========
+2025-06-21 14:31:10,461 [INFO] Report generated: report.csv
+2025-06-21 14:32:37,206 [INFO] ========== COMPUTE ENGINE FIREWALL ANALYSIS [livro-livre-453116] ==========
+2025-06-21 14:32:40,424 [WARNING] Firewall default-allow-icmp allows icmp from 0.0.0.0/0
+2025-06-21 14:32:40,424 [WARNING] Firewall default-allow-rdp allows tcp from 0.0.0.0/0
+2025-06-21 14:32:40,425 [WARNING] Firewall default-allow-ssh allows tcp from 0.0.0.0/0
+2025-06-21 14:32:40,425 [WARNING] Firewall world allows tcp from 0.0.0.0/0
+2025-06-21 14:32:40,425 [INFO] ========== CLOUD SQL PUBLIC EXPOSURE [livro-livre-453116] ==========
+2025-06-21 14:32:42,953 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 14:32:43,298 [WARNING] Encountered 403 Forbidden with reason "accessNotConfigured"
+2025-06-21 14:32:43,298 [ERROR] [CloudSQL][livro-livre-453116] Error: <HttpError 403 when requesting https://sqladmin.googleapis.com/sql/v1beta4/projects/livro-livre-453116/instances?alt=json returned "Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2025-06-21 14:32:43,299 [INFO] ========== IAM ROLE ANALYSIS [livro-livre-453116] ==========
+2025-06-21 14:32:45,960 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 14:32:47,102 [WARNING] Project livro-livre-453116 has role projects/livro-livre-453116/roles/CustomRole with sensitive permissions
+2025-06-21 14:32:47,102 [INFO] ========== GKE CLUSTER EXPOSURE [livro-livre-453116] ==========
+2025-06-21 14:32:50,186 [ERROR] [GKE][livro-livre-453116] Error: 403 Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "container.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Kubernetes Engine API"
+}
+metadata {
+  key: "containerInfo"
+  value: "livro-livre-453116"
+}
+metadata {
+  key: "consumer"
+  value: "projects/livro-livre-453116"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+, locale: "en-US"
+message: "Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+]
+2025-06-21 14:32:50,186 [INFO] ========== CLOUD STORAGE BUCKET ACCESS [livro-livre-453116] ==========
+2025-06-21 14:32:53,973 [WARNING] Bucket my_bucket-0fdhjfdsjklhflkdsj is public via role roles/storage.bucketViewer
+2025-06-21 14:32:53,973 [INFO] ========== PERSISTENT DISK ENCRYPTION (CMEK) [livro-livre-453116] ==========
+2025-06-21 14:35:30,039 [INFO] ========== GCPANALYZER [] ==========
+2025-06-21 14:35:30,189 [INFO] ========== GENERATING CSV REPORT... [] ==========
+2025-06-21 14:35:30,189 [INFO] Report generated: report.csv
+2025-06-21 14:37:55,953 [INFO] ========== COMPUTE ENGINE FIREWALL ANALYSIS [livro-livre-453116] ==========
+2025-06-21 14:37:59,155 [WARNING] Firewall default-allow-icmp allows icmp from 0.0.0.0/0
+2025-06-21 14:37:59,155 [WARNING] Firewall default-allow-rdp allows tcp from 0.0.0.0/0
+2025-06-21 14:37:59,155 [WARNING] Firewall default-allow-ssh allows tcp from 0.0.0.0/0
+2025-06-21 14:37:59,155 [WARNING] Firewall world allows tcp from 0.0.0.0/0
+2025-06-21 14:37:59,156 [INFO] ========== CLOUD SQL PUBLIC EXPOSURE [livro-livre-453116] ==========
+2025-06-21 14:38:01,809 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 14:38:02,213 [WARNING] Encountered 403 Forbidden with reason "accessNotConfigured"
+2025-06-21 14:38:02,213 [ERROR] [CloudSQL][livro-livre-453116] Error: <HttpError 403 when requesting https://sqladmin.googleapis.com/sql/v1beta4/projects/livro-livre-453116/instances?alt=json returned "Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Cloud SQL Admin API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sqladmin.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2025-06-21 14:38:02,213 [INFO] ========== IAM ROLE ANALYSIS [livro-livre-453116] ==========
+2025-06-21 14:38:04,928 [INFO] file_cache is only supported with oauth2client<4.0.0
+2025-06-21 14:38:06,011 [WARNING] Project livro-livre-453116 has role projects/livro-livre-453116/roles/CustomRole with sensitive permissions
+2025-06-21 14:38:06,011 [INFO] ========== GKE CLUSTER EXPOSURE [livro-livre-453116] ==========
+2025-06-21 14:38:09,091 [ERROR] [GKE][livro-livre-453116] Error: 403 Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "container.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Kubernetes Engine API"
+}
+metadata {
+  key: "containerInfo"
+  value: "livro-livre-453116"
+}
+metadata {
+  key: "consumer"
+  value: "projects/livro-livre-453116"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+, locale: "en-US"
+message: "Kubernetes Engine API has not been used in project livro-livre-453116 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=livro-livre-453116"
+}
+]
+2025-06-21 14:38:09,091 [INFO] ========== CLOUD STORAGE BUCKET ACCESS [livro-livre-453116] ==========
+2025-06-21 14:38:12,371 [WARNING] Bucket my_bucket-0fdhjfdsjklhflkdsj is public via role roles/storage.bucketViewer
+2025-06-21 14:38:12,371 [INFO] ========== PERSISTENT DISK ENCRYPTION (CMEK) [livro-livre-453116] ==========
+2025-06-21 14:40:52,436 [INFO] ========== GCPANALYZER [Table] ==========
+2025-06-21 14:40:52,594 [INFO] ========== GENERATING CSV REPORT... [Path: report.csv] ==========
+2025-06-21 14:40:52,595 [INFO] Report generated: report.csv
