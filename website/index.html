@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Cloud Analyzer</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Simple Cloud Analyzer</h1>
+        <p>
+          <strong>Simple Cloud Analyzer</strong> is a multi-cloud CLI (currently
+          supporting AWS and GCP) designed to identify insecure configurations
+          and highlight cloud security best practices.
+        </p>
+        <p>
+          Learn more:
+          <a
+            href="https://github.com/dg2003gh/simple-cloud-analyzer"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
+      </section>
+
+      <section>
+        <h1>Usage</h1>
+        <pre><code>sca [OPTIONS]</code></pre>
+
+        <h2>Options</h2>
+        <ul>
+          <li>
+            <code>--providers &lt;aws|gcp&gt;</code><br /><small
+              >Cloud providers to analyze. Default: <code>aws</code></small
+            >
+          </li>
+          <li>
+            <code>--ports &lt;PORT...&gt;</code><br /><small
+              >Ports to check for public exposure. Default:
+              <code>22 3389 3306 5432 27017 6379 9200</code></small
+            >
+          </li>
+          <li>
+            <code>--output &lt;FILE&gt;</code><br /><small
+              >CSV report output path. Default: <code>report.csv</code></small
+            >
+          </li>
+          <li>
+            <code>--aws-regions &lt;LIST&gt;</code><br /><small
+              >Comma-separated AWS regions. Example:
+              <code>us-east-1,sa-east-1</code></small
+            >
+          </li>
+          <li>
+            <code>--gcp-projects &lt;LIST&gt;</code><br /><small
+              >Comma-separated GCP project IDs. Example:
+              <code>project-prd,project-stg</code></small
+            >
+          </li>
+          <li>
+            <code>--debug</code><br /><small>Enable debug logging.</small>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Documentation</h1>
+        <span class="wrapper">
+          <img
+            src="./imgs/construction-crane-lifter-svgrepo-com.svg"
+            width="100"
+            alt="Under Construction Icon"
+          />
+          <p><strong>Under construction</strong></p>
+        </span>
+      </section>
+    </main>
+  </body>
+</html>
