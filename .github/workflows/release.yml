@@ -1,0 +1,76 @@
+name: create new release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: sca
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y wine64 zip
+
+      - name: Install Poetry and PyInstaller
+        run: |
+          pip install poetry
+          poetry install || true
+          poetry run pip install pyinstaller
+
+      - name: Build Linux binary
+        run: |
+          poetry run pyinstaller --onefile main.py \
+            --name $APP_NAME \
+            --distpath dist/linux
+
+      - name: Build Windows binary with Wine
+        run: |
+          poetry run pyinstaller --onefile main.py \
+            --name $APP_NAME.exe \
+            --distpath dist/windows \
+            --clean --noconfirm
+        env:
+          PYINSTALLER_PLATFORM: win32
+
+      - name: Create ZIPs
+        shell: bash
+        run: |
+          cd dist/linux && zip ../../$APP_NAME-linux.zip $APP_NAME && cd -
+          cd dist/windows && zip ../../$APP_NAME-windows.zip $APP_NAME.exe && cd -
+
+      - name: Create .tar.gz archives
+        shell: bash
+        run: |
+          tar -czf ${APP_NAME}-linux.tar.gz -C dist/linux $APP_NAME
+          tar -czf ${APP_NAME}-windows.tar.gz -C dist/windows $APP_NAME.exe
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            $APP_NAME-linux.zip
+            $APP_NAME-windows.zip
+            $APP_NAME-linux.tar.gz
+            $APP_NAME-windows.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: dist/**
