@@ -33,13 +33,13 @@ jobs:
 
       - name: Build Linux binary
         run: |
-          poetry run pyinstaller --onefile main.py \
+          poetry run pyinstaller --onefile src/main.py \
             --name $APP_NAME \
             --distpath dist/linux
 
       - name: Build Windows binary with Wine
         run: |
-          poetry run pyinstaller --onefile main.py \
+          poetry run pyinstaller --onefile src/main.py \
             --name $APP_NAME.exe \
             --distpath dist/windows \
             --clean --noconfirm
