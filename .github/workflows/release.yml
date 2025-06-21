@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      APP_NAME: ${{ var.APP_NAME }}
+      APP_NAME: ${{ env.APP_NAME }}
 
     steps:
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
             --distpath dist/windows \
             --clean --noconfirm
         env:
-          PYINSTALLER_PLATFORM: ${{ var.PYINSTALLER_PLATFORM }}
+          PYINSTALLER_PLATFORM: ${{ env.PYINSTALLER_PLATFORM }}
 
       - name: Create ZIPs
         shell: bash
