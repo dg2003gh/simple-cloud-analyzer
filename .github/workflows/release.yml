@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      APP_NAME: ${{env.APP_NAME}}
+      APP_NAME: ${{ vars.APP_NAME }}
 
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{env.PY_VERSION}}
+          python-version: ${{ vars.PY_VERSION }}
 
       - name: Install system dependencies
         run: |
@@ -44,7 +44,7 @@ jobs:
             --distpath dist/windows \
             --clean --noconfirm
         env:
-          PYINSTALLER_PLATFORM: ${{env.PYINSTALLER_PLATFORM}}
+          PYINSTALLER_PLATFORM: ${{ vars.PYINSTALLER_PLATFORM }}
 
       - name: Create ZIPs
         shell: bash
@@ -67,7 +67,7 @@ jobs:
             $APP_NAME-linux.tar.gz
             $APP_NAME-windows.tar.gz
         env:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
