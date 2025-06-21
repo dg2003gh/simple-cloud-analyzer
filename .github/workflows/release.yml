@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ var.PY_VERSION }}
+          python-version: ${{ env.PY_VERSION }}
 
       - name: Install system dependencies
         run: |
